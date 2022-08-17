@@ -1,0 +1,6 @@
+{
+	"require": {
+		"vlucas/phpdotenv": "^5.4",
+		"adbario/php-dot-notation": "^3.1"
+	}
+}
