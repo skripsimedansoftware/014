@@ -30,7 +30,14 @@ $hook['pre_system'] = NULL;
  * Called immediately prior to any of your controllers being called. All base
  * classes, routing, and security checks have been done.
  */
-$hook['pre_controller'] = NULL;
+$hook['pre_controller'] = array(
+	array(
+		'class'		=> 'Pre_Controller',
+		'function'	=> 'installation',
+		'filename'	=> 'Pre_Controller.php',
+		'filepath'	=> 'hooks'
+	)
+);
 
 /**
  * -------------------------------------------------------------------------
@@ -40,14 +47,7 @@ $hook['pre_controller'] = NULL;
  * Called immediately after your controller is instantiated, but prior to any
  * method calls happening.
  */
-$hook['post_controller_constructor'] = array(
-	array(
-		'class'		=> 'Pre_System',
-		'function'	=> 'installation',
-		'filename'	=> 'Pre_System.php',
-		'filepath'	=> 'hooks'
-	)
-);
+$hook['post_controller_constructor'] = NULL;
 
 /**
  * -------------------------------------------------------------------------

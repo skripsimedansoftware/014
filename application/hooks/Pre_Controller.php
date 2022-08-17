@@ -8,6 +8,18 @@
 
 class Pre_Controller
 {
+	/**
+	 * Installation
+	 */
+	public function installation()
+	{
+		$RTR =& load_class('Router', 'core', isset($routing) ? $routing : NULL);
+
+		if (strtoupper(env('DB_INSTALLED')) == 'NO' && $RTR->fetch_class() !== 'migration')
+		{
+			redirect(base_url('migration'), 'refresh');
+		}
+	}
 }
 
 /* End of file Pre_Controller.php */

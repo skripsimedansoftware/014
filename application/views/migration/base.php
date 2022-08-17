@@ -25,6 +25,7 @@
 				<ul class="nav navbar-nav">
 					<li class="<?= matches_request(NULL, 'migration', 'index') ? 'active' : '' ?>"><a href="<?= base_url('migration') ?>">Home</a></li>
 					<li class="<?= matches_request(NULL, 'migration', 'database') ? 'active' : '' ?>"><a href="<?= base_url('migration/database') ?>">Database</a></li>
+					<li class="<?= matches_request(NULL, 'migration', 'setup') ? 'active' : '' ?>"><a href="<?= base_url('migration/setup') ?>">Setup</a></li>
 				</ul>
 			</div>
 		</div>

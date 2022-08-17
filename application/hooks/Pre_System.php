@@ -8,16 +8,6 @@
 
 class Pre_System
 {
-	/**
-	 * Installation
-	 */
-	public function installation()
-	{
-		if (strtoupper(env('DB_INSTALLED')) == 'NO' && get_instance()->router->fetch_class() !== 'migration')
-		{
-			redirect(base_url('migration'), 'refresh');
-		}
-	}
 }
 
 /* End of file Pre_System.php */
