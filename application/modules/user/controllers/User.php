@@ -257,17 +257,20 @@ class User extends HMVC_Controller
 						else
 						{
 							$this->session->set_flashdata('forgot-password', FALSE);
+							$this->session->set_flashdata('forgot-password-error', 'Error sending email');
 						}
-
-						redirect(module_link('sign-in'), 'refresh');
 					}
 					else
 					{
-
+						$this->session->set_flashdata('forgot-password', FALSE);
+						$this->session->set_flashdata('forgot-password-error', 'SMTP not configured');
 					}
+
+					redirect(module_link('sign-in'), 'refresh');
 				}
 				else
 				{
+					$this->session->set_flashdata('forgot-password', FALSE);
 					$this->session->set_flashdata('forgot-password-error', 'Couldn\'t find your account');
 					redirect(module_link('forgot-password'), 'refresh');
 				}
