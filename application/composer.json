@@ -1,0 +1,6 @@
+{
+    "require": {
+        "curl/curl": "^2.3",
+        "medansoftware/naive-bayes-text-classification": "^1.0"
+    }
+}
