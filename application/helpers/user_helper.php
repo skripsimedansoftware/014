@@ -36,4 +36,4 @@ if (!function_exists('user_session'))
 }
 
 /* End of file user_helper.php */
-/* Location : ./user/helpers/user_helper.php */
+/* Location : ./application/helpers/user_helper.php */
