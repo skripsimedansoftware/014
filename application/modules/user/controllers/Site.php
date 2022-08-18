@@ -14,6 +14,9 @@ class Site extends HMVC_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		$this->authenticated_module(NULL, function() {
+			redirect(module_link('sign-in'), 'refresh');
+		});
 	}
 
 	/**
