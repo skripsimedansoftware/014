@@ -25,7 +25,7 @@
 								</tr>
 								<tr>
 									<td>Gender</td>
-									<td><?= ucfirst($profile['gender']) ?></td>
+									<td><?= (!empty($profile['gender'])) ? ucfirst($profile['gender']) : '-' ?></td>
 								</tr>
 							</tbody>
 						</table>
