@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title><?= isset($title) ? $title . ' - ' . env('APP_NAME') : env('APP_NAME'); ?></title>
+		<title><?= isset($title) ? $title . ' - ' . env('SITE_NAME') : env('SITE_NAME'); ?></title>
 		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 		<link rel="stylesheet" href="<?= base_url('assets/adminlte/2.4.x/bower_components/bootstrap/dist/css/bootstrap.min.css') ?>">
 		<link rel="stylesheet" href="<?= base_url('assets/adminlte/2.4.x/bower_components/font-awesome/css/font-awesome.min.css') ?>">
