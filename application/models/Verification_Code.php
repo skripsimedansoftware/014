@@ -1,14 +1,14 @@
 <?php
 /**
- * @package    Angeli\Verification_code
- * @subpackage Verification_code
+ * @package    Angeli\Verification_Code
+ * @subpackage Verification_Code
  * @category   Model
  * @author     Agung Dirgantara <agungmasda29@gmail.com>
  */
 
 namespace Angeli;
 
-class Verification_code extends MY_Model
+class Verification_Code extends MY_Model
 {
 	/**
 	 * constructor
@@ -20,5 +20,5 @@ class Verification_code extends MY_Model
 	}
 }
 
-/* End of file Verification_code.php */
-/* Location : ./application/models/Verification_code.php */
+/* End of file Verification_Code.php */
+/* Location : ./application/models/Verification_Code.php */
