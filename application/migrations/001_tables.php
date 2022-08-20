@@ -15,6 +15,9 @@ class Migration_Tables extends CI_Migration
 	{
 		$this->user();
 		$this->verification_code();
+		$this->data_training();
+		$this->product();
+		$this->comment();
 		$this->seeder();
 	}
 
@@ -81,6 +84,101 @@ class Migration_Tables extends CI_Migration
 
 		$this->dbforge->add_key('id', TRUE);
 		$this->dbforge->create_table('user');
+	}
+
+	/**
+	 * Product
+	 */
+	private function product()
+	{
+		$this->dbforge->add_field(array(
+			'id' => array(
+				'type' => 'BIGINT',
+				'unsigned' => TRUE,
+				'auto_increment' => TRUE
+			),
+			'shop_id' => array(
+				'type' => 'BIGINT',
+				'unsigned' => TRUE
+			),
+			'item_id' => array(
+				'type' => 'BIGINT',
+				'unsigned' => TRUE
+			),
+			'data' => array(
+				'type' => 'TEXT'
+			),
+			'created_at' => array(
+				'type' => 'DATETIME'
+			)
+		));
+
+		$this->dbforge->add_key('id', TRUE);
+		$this->dbforge->create_table('product');
+	}
+
+	/**
+	 * Comment
+	 */
+	private function comment()
+	{
+		$this->dbforge->add_field(array(
+			'id' => array(
+				'type' => 'BIGINT',
+				'unsigned' => TRUE,
+				'auto_increment' => TRUE
+			),
+			'order_id' => array(
+				'type' => 'BIGINT',
+				'unsigned' => TRUE
+			),
+			'shop_id' => array(
+				'type' => 'BIGINT',
+				'unsigned' => TRUE
+			),
+			'item_id' => array(
+				'type' => 'BIGINT',
+				'unsigned' => TRUE
+			),
+			'classification' => array(
+				'type' => 'VARCHAR',
+				'null' => TRUE,
+				'constraint' => 255
+			),
+			'comment' => array(
+				'type' => 'TEXT'
+			)
+		));
+
+		$this->dbforge->add_key('id', TRUE);
+		$this->dbforge->create_table('comment');
+	}
+
+	/**
+	 * Data training
+	 */
+	private function data_training()
+	{
+		$this->dbforge->add_field(array(
+			'id' => array(
+				'type' => 'BIGINT',
+				'unsigned' => TRUE,
+				'auto_increment' => TRUE
+			),
+			'classification' => array(
+				'type' => 'VARCHAR',
+				'constraint' => 255
+			),
+			'text' => array(
+				'type' => 'TEXT'
+			),
+			'created_at' => array(
+				'type' => 'DATETIME'
+			)
+		));
+
+		$this->dbforge->add_key('id', TRUE);
+		$this->dbforge->create_table('data-training');
 	}
 
 	/**

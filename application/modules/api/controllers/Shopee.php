@@ -12,7 +12,7 @@ class Shopee extends HMVC_Controller
 
 	private $curl;
 
-	private $user_image_url;
+	private $image_hostname;
 
 	/**
 	 * constructor
@@ -22,7 +22,7 @@ class Shopee extends HMVC_Controller
 		parent::__construct();
 		$this->url = 'https://shopee.co.id';
 		$this->curl = new Curl\Curl;
-		$this->user_image_url = 'https://cf.shopee.co.id';
+		$this->image_hostname = 'https://cf.shopee.co.id';
 	}
 
 	public function search_hint($search_type = 0, $version = 1)
@@ -38,13 +38,15 @@ class Shopee extends HMVC_Controller
 
 	public function search_user($limit = 6, $offset = 0, $page = 'search_user', $with_search_cover = TRUE)
 	{
-		$request = $this->curl->get($this->url.'/api/v4/search/search_user', array(
+		$request_params = array_merge(array(
 			'keyword' => $this->input->get('keyword'),
 			'page' => $page,
 			'limit' => $limit,
 			'offset' => $offset,
 			'with_search_cover' => filter_var($with_search_cover, FILTER_VALIDATE_BOOLEAN)
-		));
+		), $this->input->get());
+
+		$request = $this->curl->get($this->url.'/api/v4/search/search_user', $request_params);
 
 		$this->output->set_content_type('application/json')->set_output($request->response);
 	}
@@ -70,33 +72,87 @@ class Shopee extends HMVC_Controller
 		$this->output->set_content_type('application/json')->set_output($request->response);
 	}
 
-	public function user_image($uid)
+	public function image($uid)
 	{
-		$request = $this->curl->get($this->user_image_url.'/file/'.$uid.'_tn');
+		$request = $this->curl->get($this->image_hostname.'/file/'.$uid.'_tn');
 		$this->output->set_content_type($request->response_headers[2])->set_output($request->response);
 	}
 
-	public function get_item($item_id = NULL, $shopid = NULL)
+	public function store_product($shopid = NULL, $limit = 30, $offset = 0)
 	{
-		$request = $this->curl->get($this->url.'/api/v4/item/get', array(
+		$request_params = array_merge(array(
+			'bundle' => 'shop_page_category_tab_main',
 			'shopid' => $shopid,
-			'item_id' => $item_id
-		));
+			'sort_type' => 2,
+			'tab_name' => 'popular',
+			'limit' => $limit,
+			'offset' => $offset
+		), $this->input->get());
+
+		$request = $this->curl->get($this->url.'/api/v4/recommend/recommend', $request_params);
+
+		$response = json_decode($request->response);
+
+		foreach ($response->data->sections as $section)
+		{
+			if (isset($section->data) && isset($section->data->item))
+			{
+				foreach ($section->data->item as $item)
+				{
+					$product = $this->product->get_where(array('shop_id' => $item->shopid, 'item_id' => $item->itemid));
+
+					if ($product->num_rows() < 1)
+					{
+						$this->product->insert(array('shop_id' => $item->shopid, 'item_id' => $item->itemid, 'data' => json_encode($item)));
+					}
+				}
+			}
+		}
 
 		$this->output->set_content_type('application/json')->set_output($request->response);
 	}
 
-	public function get_item_ratings($shopid = NULL, $item_id = 20, $type = 0, $filter = 0, $flag = 1, $limit = 10, $offset = 0)
+	public function cookies()
 	{
-		$request = $this->curl->get($this->url.'/api/v2/item/get_ratings', array(
+		$cookies = file_get_contents(FCPATH.'cookies.json');
+		$cookies = json_decode($cookies);
+
+		foreach ($cookies as $cookie)
+		{
+			$this->curl->setCookie($cookie->name, $cookie->value);
+		}
+	}
+
+	public function get_item_ratings($shopid = NULL, $itemid = NULL, $type = 0, $filter = 0, $flag = 1, $limit = 50, $offset = 0)
+	{
+		$request_params = array(
 			'shopid' => $shopid,
-			'item_id' => $item_id,
+			'itemid' => $itemid,
 			'type' => $type,
 			'filter' => $filter,
 			'flag' => $flag,
 			'limit' => $limit,
 			'offset' => $offset
-		));
+		);
+
+		$request = $this->curl->get($this->url.'/api/v2/item/get_ratings', array_merge($request_params, $this->input->get()));
+
+		$response = json_decode($request->response);
+
+		foreach ($response->data->ratings as $rating)
+		{
+			$comment = $this->comment->get_where(array('order_id' => $rating->orderid));
+
+			if ($comment->num_rows() < 1)
+			{
+				$this->comment->insert(array(
+					'shop_id' => $rating->shopid,
+					'item_id' => $rating->itemid,
+					'order_id' => $rating->orderid,
+					'comment' => $rating->comment
+				));
+			}
+		}
 
 		$this->output->set_content_type('application/json')->set_output($request->response);
 	}

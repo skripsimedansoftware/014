@@ -21,7 +21,7 @@ class Site extends HMVC_Controller
 	 */
 	public function index()
 	{
-		$this->load->view('welcome_message');
+		$this->template->load('index');
 	}
 
 	/**
@@ -36,7 +36,8 @@ class Site extends HMVC_Controller
 		$data['code'] = $code;
 		$data['header'] = $header;
 		$data['message'] = $message;
-		$this->load->view('error', $data);
+		$this->output->set_header('HTTP/1.1 '.$code);
+		$this->template->load('error', $data);
 	}
 }
 

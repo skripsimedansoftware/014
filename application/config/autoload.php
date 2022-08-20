@@ -137,4 +137,4 @@ $autoload['language'] = array('angeli');
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('user', 'verification_code');
+$autoload['model'] = array('comment', 'data_training', 'user', 'product', 'verification_code');

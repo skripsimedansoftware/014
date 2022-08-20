@@ -13,19 +13,7 @@
 		<link rel="stylesheet" href="<?= base_url('assets/select2/bootstrap-3-theme/dist/select2-bootstrap.min.css') ?>">
 		<link rel="stylesheet" href="<?= base_url('assets/adminlte/2.4.x/dist/css/AdminLTE.min.css') ?>">
 		<link rel="stylesheet" href="<?= base_url('assets/adminlte/2.4.x/dist/css/skins/_all-skins.min.css') ?>">
-
-		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/jquery/dist/jquery.min.js') ?>"></script>
-		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
-		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') ?>"></script>
-		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/fastclick/lib/fastclick.js') ?>"></script>
-		<script src="<?= base_url('assets/sweetalert2/sweetalert2.all.min.js') ?>"></script>
-		<script src="<?= base_url('assets/select2/dist/js/select2.min.js') ?>"></script>
-		<script src="<?= base_url('assets/adminlte/2.4.x/dist/js/adminlte.min.js') ?>"></script>
 		<style type="text/css">
-		.help-block.error {
-			color: red;
-		}
-
 		.select2-result-store {
 			padding-top: 4px;
 			padding-bottom: 3px;
@@ -84,10 +72,6 @@
 		.select2-results__option--highlighted .select2-result-store__following {
 			color: #00738c;
 		}
-
-		.swal2-popup {
-			font-size: 1.6rem !important;
-		}
 		</style>
 		<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -95,73 +79,31 @@
 		<![endif]-->
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 	</head>
-	<body class="hold-transition skin-yellow sidebar-mini">
+	<body class="hold-transition skin-green layout-top-nav">
 		<div class="wrapper">
 			<header class="main-header">
-				<a href="<?= base_url() ?>" class="logo" target="_blank">
-					<span class="logo-mini"><b>A</b>DM</span>
-					<span class="logo-lg"><b><?= env('APP_NAME') ?></b></span>
-				</a>
 				<nav class="navbar navbar-static-top">
-					<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</a>
-					<div class="navbar-custom-menu">
-						<ul class="nav navbar-nav">
-							<li class="dropdown user user-menu">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									<img src="<?= base_url(user_session('photo', 'assets/adminlte/2.4.x/dist/img/user2-160x160.jpg')) ?>" class="user-image" alt="User Image">
-									<span class="hidden-xs"><?= $user_session['full-name'] ?></span>
-								</a>
-								<ul class="dropdown-menu">
-									<li class="user-header">
-										<img src="<?= base_url(user_session('photo', 'assets/adminlte/2.4.x/dist/img/user2-160x160.jpg')) ?>" class="img-circle" alt="User Image">
-										<p><?= $user_session['full-name'] ?></p>
-									</li>
-									<li class="user-footer">
-										<div class="pull-left">
-											<a href="<?= module_link('profile') ?>" class="btn btn-default btn-flat">Profile</a>
-										</div>
-										<div class="pull-right">
-											<a href="<?= module_link('sign-out') ?>" class="btn btn-default btn-flat">Sign out</a>
-										</div>
-									</li>
-								</ul>
-							</li>
-						</ul>
+					<div class="container">
+						<div class="navbar-header">
+							<a href="<?= module_link() ?>" class="navbar-brand"><b><?= env('SITE_NAME') ?></b></a>
+							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+								<i class="fa fa-bars"></i>
+							</button>
+						</div>
+						<div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+							<ul class="nav navbar-nav">
+								<li class="<?= matches_request('site', false, 'index') ? 'active' : '' ?>"><a href="<?= module_link() ?>">Beranda</a></li>
+								<li class="<?= matches_request('site', false, 'analysis_sentiment') ? 'active' : '' ?>"><a href="<?= module_link('analysis_sentiment') ?>">Analisis Sentimen</a></li>
+							</ul>
+						</div>
+						<div class="navbar-custom-menu">
+							<ul class="nav navbar-nav">
+								<li><a href="<?= base_url('user/sign-in') ?>">Masuk <i class="fa fa-sign-in"></i></a></li>
+							</ul>
+						</div>
 					</div>
 				</nav>
 			</header>
-			<aside class="main-sidebar">
-				<section class="sidebar">
-					<div class="user-panel">
-						<div class="pull-left image">
-							<img src="<?= base_url(user_session('photo', 'assets/adminlte/2.4.x/dist/img/user2-160x160.jpg')) ?>" class="img-circle" alt="User Image">
-						</div>
-						<div class="pull-left info">
-							<p><?= $user_session['full-name'] ?></p>
-							<a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-						</div>
-					</div>
-					<form action="#" method="get" class="sidebar-form">
-						<div class="input-group">
-							<input type="text" name="q" class="form-control" placeholder="Search...">
-							<span class="input-group-btn">
-								<button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
-							</span>
-						</div>
-					</form>
-					<ul class="sidebar-menu" data-widget="tree">
-						<li class="header">MAIN NAVIGATION</li>
-						<li class="<?= matches_request(FALSE, 'user', 'index') ? 'active' : '' ?>"><a href="<?= module_link() ?>"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-						<li class="<?= matches_request(FALSE, 'sentiment', ['index', 'product']) ? 'active' : '' ?>"><a href="<?= module_link('sentiment') ?>"><i class="fa fa-pie-chart"></i> <span>Analisis Sentimen</span></a></li>
-						<li class="<?= matches_request(FALSE, 'data_training', 'index') ? 'active' : '' ?>"><a href="<?= module_link('data_training') ?>"><i class="fa fa-magic"></i> <span>Data Training</span></a></li>
-					</ul>
-				</section>
-			</aside>
 			<?= $__content; ?>
 			<footer class="main-footer">
 				<div class="pull-right hidden-xs">
@@ -170,7 +112,15 @@
 				<strong>Copyright &copy; <?= env('SITE_NAME') ?> - <a href="<?= base_url() ?>" target="_blank"><?= env('APP_NAME') ?></a>.</strong> All rights
 				reserved.
 			</footer>
+			<div class="control-sidebar-bg"></div>
 		</div>
+		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/jquery/dist/jquery.min.js') ?>"></script>
+		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
+		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') ?>"></script>
+		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/fastclick/lib/fastclick.js') ?>"></script>
+		<script src="<?= base_url('assets/sweetalert2/sweetalert2.all.min.js') ?>"></script>
+		<script src="<?= base_url('assets/select2/dist/js/select2.min.js') ?>"></script>
+		<script src="<?= base_url('assets/adminlte/2.4.x/dist/js/adminlte.min.js') ?>"></script>
 		<script type="text/javascript">
 		function readURL(input) {
 			if (input.files && input.files[0]) {
@@ -236,9 +186,10 @@
 					return query;
 				},
 				processResults: function (data) {
+					// Transforms the top-level key of the response object from 'items' to 'results'
 					return {
 						results: $.map(data.data.users, function (obj) {
-							obj.id = obj.shopid || obj.username;
+							obj.id = obj.shopid || obj.username; // replace pk with your identifier
 							obj.text = obj.shopname || obj.username;
 
 							return obj;
@@ -354,7 +305,7 @@
 												html_product += '</div>';
 											html_product += '</div>';
 											html_product += '<div class="box-footer">';
-												html_product += '<a target="_blank" href="<?= module_link('sentiment/product/') ?>'+item.shopid+'/'+item.itemid+'" class="btn btn-block bg-navy">Analisis Sentimen</a>';
+												html_product += '<a target="_blank" href="<?= module_link('sentiment/product/') ?>'+item.shopid+'/'+item.itemid+'" class="btn btn-primary">Analisis Sentimen</a>';
 											html_product += '</div>';
 										html_product += '</div>';
 									html_product += '</div>';
@@ -373,53 +324,6 @@
 				}
 			});
 		});
-
-		$(document).on('click', '#get-comments', (function() {
-			Swal.fire({
-				title: 'Jumlah Komentar',
-				input: 'text',
-				inputAttributes: {
-					autocapitalize: 'off'
-				},
-				showCancelButton: true,
-				confirmButtonText: 'Ambil Komentar',
-				showLoaderOnConfirm: true,
-				preConfirm: (crawl) => {
-					var all_request = new Array();
-					for (i = 0; i < (crawl/50); i++) {
-						var request = new Promise((resolve, reject) => {
-							 $.ajax({
-								url: '<?= base_url('api/shopee/get_item_ratings/'.$this->uri->segment(4).'/'.$this->uri->segment(5)) ?>',
-								type: 'GET',
-								dataType: 'JSON',
-								data: { offset: (i*50) },
-								success: function(data) {
-									resolve(true)
-								},
-								error: function(error) {
-									reject(false);
-								}
-							})
-						});
-
-						all_request.push(request);
-					}
-
-					return Promise.all(all_request);
-				},
-				allowOutsideClick: () => !Swal.isLoading()
-			}).then((result) => {
-				if (result.isConfirmed) {
-					Swal.fire({
-						position: 'top-end',
-						icon: 'success',
-						title: 'Komentar berhasil di ambil',
-						showConfirmButton: false,
-						timer: 1500
-					});
-				}
-			});
-		}));
 		</script>
 	</body>
 </html>

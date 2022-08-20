@@ -1,28 +1,67 @@
 <div class="content-wrapper">
 	<section class="content-header">
-		<h1>Blank page <small>it all starts here</small></h1>
-		<ol class="breadcrumb">
-			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li><a href="#">Examples</a></li>
-			<li class="active">Blank page</li>
-		</ol>
+		<h1>Dashboard<small> <?= env('APP_NAME') ?></small></h1>
 	</section>
 	<section class="content">
-		<div class="box">
-			<div class="box-header with-border">
-				<h3 class="box-title">Title</h3>
-				<div class="box-tools pull-right">
-					<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-					<i class="fa fa-minus"></i></button>
-					<button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-					<i class="fa fa-times"></i></button>
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title">Visualisasi Sentimen Naive Bayes</h3>
+					</div>
+					<div class="box-body">
+						<div class="row">
+							<div class="col-md-8">
+								<div class="chart-responsive">
+									<canvas id="pieChart" height="150"></canvas>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<ul class="chart-legend clearfix">
+									<li><i class="fa fa-circle-o text-green"></i> Positif</li>
+									<li><i class="fa fa-circle-o text-primary"></i> Netral</li>
+									<li><i class="fa fa-circle-o text-red"></i> Negatif</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="box-footer no-padding">
+						<ul class="nav nav-pills nav-stacked">
+							<li><a href="#">United States of America<span class="pull-right text-red"><i class="fa fa-angle-down"></i> 12%</span></a></li>
+							<li><a href="#">United States of America<span class="pull-right text-red"><i class="fa fa-angle-down"></i> 12%</span></a></li>
+							<li><a href="#">United States of America<span class="pull-right text-red"><i class="fa fa-angle-down"></i> 12%</span></a></li>
+						</ul>
+					</div>
 				</div>
 			</div>
-			<div class="box-body">
-				Start creating your amazing application!
-			</div>
-			<div class="box-footer">
-				Footer
+			<div class="col-lg-6">
+				<div class="box box-success">
+					<div class="box-header with-border">
+						<h3 class="box-title">Akurasi Sentimen Naive Bayes</h3>
+					</div>
+					<div class="box-body">
+						<div class="row">
+							<div class="col-md-8">
+								<div class="chart-responsive">
+									<canvas id="pieChart" height="150"></canvas>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<ul class="chart-legend clearfix">
+									<li><i class="fa fa-circle-o text-green"></i> Sesuai</li>
+									<li><i class="fa fa-circle-o text-red"></i> Tidak Sesuai</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="box-footer no-padding">
+						<ul class="nav nav-pills nav-stacked">
+							<li><a href="#">United States of America<span class="pull-right text-red"><i class="fa fa-angle-down"></i> 12%</span></a></li>
+							<li><a href="#">United States of America<span class="pull-right text-red"><i class="fa fa-angle-down"></i> 12%</span></a></li>
+							<li><a href="#">United States of America<span class="pull-right text-red"><i class="fa fa-angle-down"></i> 12%</span></a></li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>
