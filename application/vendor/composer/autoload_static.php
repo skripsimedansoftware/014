@@ -6,6 +6,97 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitdc714126fd09a522c0fb4615754ec4b6
 {
+    public static $files = array (
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
+        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
+        'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
+        '7d8c19660fc7bda7e3f1bb627c20c455' => __DIR__ . '/..' . '/yooper/stop-words/src/StopWordFactory.php',
+        '82b15671fa4352bd2c1ea8902d4c0c5d' => __DIR__ . '/..' . '/yooper/php-text-analysis/src/helpers/storage.php',
+        'c2fe535f6d51f069823351f60bd6b280' => __DIR__ . '/..' . '/yooper/php-text-analysis/src/helpers/print.php',
+        '34faac671c44560451a381662d8b697c' => __DIR__ . '/..' . '/yooper/php-text-analysis/src/helpers/simplified.php',
+        '97c3b78656a7c2fa22581078400c5264' => __DIR__ . '/..' . '/yooper/php-text-analysis/src/helpers/helpers.php',
+        '701340487703d077fa1bf3462f5a1343' => __DIR__ . '/..' . '/yooper/php-text-analysis/src/helpers/interactive_help.php',
+    );
+
+    public static $prefixLengthsPsr4 = array (
+        'Y' => 
+        array (
+            'Yooper\\' => 7,
+        ),
+        'W' => 
+        array (
+            'Wamania\\Snowball\\' => 17,
+        ),
+        'T' => 
+        array (
+            'TextAnalysis\\' => 13,
+        ),
+        'S' => 
+        array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
+            'Symfony\\Polyfill\\Intl\\Grapheme\\' => 31,
+            'Symfony\\Polyfill\\Ctype\\' => 23,
+            'Symfony\\Contracts\\Service\\' => 26,
+            'Symfony\\Component\\String\\' => 25,
+            'Symfony\\Component\\Console\\' => 26,
+        ),
+        'P' => 
+        array (
+            'Psr\\Container\\' => 14,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'Yooper\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yooper/nicknames/src',
+        ),
+        'Wamania\\Snowball\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wamania/php-stemmer/src',
+        ),
+        'TextAnalysis\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yooper/php-text-analysis/src',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Polyfill\\Intl\\Normalizer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
+        ),
+        'Symfony\\Polyfill\\Intl\\Grapheme\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme',
+        ),
+        'Symfony\\Polyfill\\Ctype\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
+        'Symfony\\Contracts\\Service\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/service-contracts',
+        ),
+        'Symfony\\Component\\String\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/string',
+        ),
+        'Symfony\\Component\\Console\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/console',
+        ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+    );
+
     public static $prefixesPsr0 = array (
         'S' => 
         array (
@@ -26,12 +117,15 @@ class ComposerStaticInitdc714126fd09a522c0fb4615754ec4b6
     public static $classMap = array (
         'Algorithm\\Naive_Bayes\\Text_Classification' => __DIR__ . '/..' . '/medansoftware/naive-bayes-text-classification/src/Naive_Bayes.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'Text\\Stemmer' => __DIR__ . '/..' . '/medansoftware/naive-bayes-text-classification/src/Stemmer.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdc714126fd09a522c0fb4615754ec4b6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdc714126fd09a522c0fb4615754ec4b6::$prefixDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInitdc714126fd09a522c0fb4615754ec4b6::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitdc714126fd09a522c0fb4615754ec4b6::$classMap;
 
