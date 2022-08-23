@@ -82,7 +82,16 @@ class MY_Model extends \CI_Model
 					$args = array_values($arguments);
 
 					// First argument is table name & check table exists or set table name if table doesn't exists
-					if (!$this->db->table_exists(array_shift($args)))
+					$table = array_shift($args);
+
+					if ($table !== NULL)
+					{
+						if (!$this->db->table_exists($table))
+						{
+							$arguments = array_merge(array($this->get_table()), $arguments);
+						}
+					}
+					else
 					{
 						$arguments = array_merge(array($this->get_table()), $arguments);
 					}
