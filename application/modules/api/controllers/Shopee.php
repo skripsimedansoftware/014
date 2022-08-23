@@ -22,6 +22,7 @@ class Shopee extends HMVC_Controller
 		parent::__construct();
 		$this->url = 'https://shopee.co.id';
 		$this->curl = new Curl\Curl;
+		$this->curl->setOpt(CURLOPT_SSL_VERIFYPEER, FALSE);
 		$this->image_hostname = 'https://cf.shopee.co.id';
 	}
 
