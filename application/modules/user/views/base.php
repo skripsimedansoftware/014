@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="<?= base_url('assets/sweetalert2/sweetalert2.min.css') ?>">
 		<link rel="stylesheet" href="<?= base_url('assets/select2/dist/css/select2.min.css') ?>">
 		<link rel="stylesheet" href="<?= base_url('assets/select2/bootstrap-3-theme/dist/select2-bootstrap.min.css') ?>">
+		<link rel="stylesheet" href="<?= base_url('assets/adminlte/2.4.x/bower_components/morris.js/morris.css') ?>">
 		<link rel="stylesheet" href="<?= base_url('assets/adminlte/2.4.x/dist/css/AdminLTE.min.css') ?>">
 		<link rel="stylesheet" href="<?= base_url('assets/adminlte/2.4.x/dist/css/skins/_all-skins.min.css') ?>">
 
@@ -18,6 +19,8 @@
 		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
 		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') ?>"></script>
 		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/fastclick/lib/fastclick.js') ?>"></script>
+		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/raphael/raphael.min.js') ?>"></script>
+		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/morris.js/morris.min.js') ?>"></script>
 		<script src="<?= base_url('assets/sweetalert2/sweetalert2.all.min.js') ?>"></script>
 		<script src="<?= base_url('assets/select2/dist/js/select2.min.js') ?>"></script>
 		<script src="<?= base_url('assets/adminlte/2.4.x/dist/js/adminlte.min.js') ?>"></script>

@@ -9,7 +9,7 @@
 	</section>
 	<section class="content">
 		<div class="box">
-			<form method="post" action="<?= module_link('data_training/update') ?>">
+			<form method="post" action="<?= module_link('data_training/update/'.$this->uri->segment(4)) ?>">
 				<div class="box-header with-border">
 					<h3 class="box-title">Update Data Training</h3>
 				</div>
