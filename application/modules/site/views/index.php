@@ -1,26 +1,31 @@
 <div class="content-wrapper">
 	<section class="content-header">
-		<h1>Blank page <small>it all starts here</small></h1>
-		<ol class="breadcrumb">
-			<li><a href="<?= module_link() ?>"><i class="fa fa-dashboard"></i> Home</a></li>
-			<li class="active">Data Training</li>
-		</ol>
+		<h1><?= env('SITE_NAME') ?></h1>
 	</section>
 	<section class="content">
-		<div class="box">
-			<div class="box-header with-border">
-				<h3 class="box-title">Title</h3>
-				<div class="box-tools pull-right">
-					<button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-					<button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+		<div class="row">
+			<div class="col-lg-4">
+				<div class="box">
+					<div class="box-header with-border">
+						<h3 class="box-title">Cari Toko</h3>
+					</div>
+					<div class="box-body">
+						<select id="search-store" style="width: 100%;"></select>
+					</div>
+					<div class="overlay store-search-loading hidden"><i class="fa fa-refresh fa-spin"></i></div>
 				</div>
 			</div>
-			<div class="box-body">
-				Start creating your amazing application!
-			</div>
-			<div class="box-footer">
-				Footer
+			<div class="col-lg-8 hidden store-detail">
+				<div class="box box-success">
+					<div class="box-header with-border"><h3 class="box-title">Detail Toko</h3></div>
+					<div class="box-body store-detail-body"></div>
+					<div class="overlay store-detail-loading"><i class="fa fa-refresh fa-spin"></i></div>
+					<div class="box-footer store-detail-footer"></div>
+				</div>
 			</div>
 		</div>
 	</section>
+	<section class="content hidden store-products"></section>
 </div>
+
+

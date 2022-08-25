@@ -419,7 +419,9 @@
 						title: 'Komentar berhasil di ambil',
 						showConfirmButton: false,
 						timer: 1500
-					});
+					}).then(() => {
+						window.location.reload();
+					}, console.log);
 				}
 			});
 		}));

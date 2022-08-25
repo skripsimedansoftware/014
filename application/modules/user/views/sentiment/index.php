@@ -29,6 +29,5 @@
 			</div>
 		</div>
 	</section>
-
 	<section class="content hidden store-products"></section>
 </div>

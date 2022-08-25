@@ -11,9 +11,24 @@
 		<link rel="stylesheet" href="<?= base_url('assets/sweetalert2/sweetalert2.min.css') ?>">
 		<link rel="stylesheet" href="<?= base_url('assets/select2/dist/css/select2.min.css') ?>">
 		<link rel="stylesheet" href="<?= base_url('assets/select2/bootstrap-3-theme/dist/select2-bootstrap.min.css') ?>">
+		<link rel="stylesheet" href="<?= base_url('assets/adminlte/2.4.x/bower_components/morris.js/morris.css') ?>">
 		<link rel="stylesheet" href="<?= base_url('assets/adminlte/2.4.x/dist/css/AdminLTE.min.css') ?>">
 		<link rel="stylesheet" href="<?= base_url('assets/adminlte/2.4.x/dist/css/skins/_all-skins.min.css') ?>">
+
+		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/jquery/dist/jquery.min.js') ?>"></script>
+		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
+		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') ?>"></script>
+		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/fastclick/lib/fastclick.js') ?>"></script>
+		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/raphael/raphael.min.js') ?>"></script>
+		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/morris.js/morris.min.js') ?>"></script>
+		<script src="<?= base_url('assets/sweetalert2/sweetalert2.all.min.js') ?>"></script>
+		<script src="<?= base_url('assets/select2/dist/js/select2.min.js') ?>"></script>
+		<script src="<?= base_url('assets/adminlte/2.4.x/dist/js/adminlte.min.js') ?>"></script>
 		<style type="text/css">
+		.help-block.error {
+			color: red;
+		}
+
 		.select2-result-store {
 			padding-top: 4px;
 			padding-bottom: 3px;
@@ -72,6 +87,10 @@
 		.select2-results__option--highlighted .select2-result-store__following {
 			color: #00738c;
 		}
+
+		.swal2-popup {
+			font-size: 1.6rem !important;
+		}
 		</style>
 		<!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -93,7 +112,6 @@
 						<div class="collapse navbar-collapse pull-left" id="navbar-collapse">
 							<ul class="nav navbar-nav">
 								<li class="<?= matches_request('site', false, 'index') ? 'active' : '' ?>"><a href="<?= module_link() ?>">Beranda</a></li>
-								<li class="<?= matches_request('site', false, 'analysis_sentiment') ? 'active' : '' ?>"><a href="<?= module_link('analysis_sentiment') ?>">Analisis Sentimen</a></li>
 							</ul>
 						</div>
 						<div class="navbar-custom-menu">
@@ -112,15 +130,7 @@
 				<strong>Copyright &copy; <?= env('SITE_NAME') ?> - <a href="<?= base_url() ?>" target="_blank"><?= env('APP_NAME') ?></a>.</strong> All rights
 				reserved.
 			</footer>
-			<div class="control-sidebar-bg"></div>
 		</div>
-		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/jquery/dist/jquery.min.js') ?>"></script>
-		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
-		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/jquery-slimscroll/jquery.slimscroll.min.js') ?>"></script>
-		<script src="<?= base_url('assets/adminlte/2.4.x/bower_components/fastclick/lib/fastclick.js') ?>"></script>
-		<script src="<?= base_url('assets/sweetalert2/sweetalert2.all.min.js') ?>"></script>
-		<script src="<?= base_url('assets/select2/dist/js/select2.min.js') ?>"></script>
-		<script src="<?= base_url('assets/adminlte/2.4.x/dist/js/adminlte.min.js') ?>"></script>
 		<script type="text/javascript">
 		function readURL(input) {
 			if (input.files && input.files[0]) {
@@ -186,10 +196,9 @@
 					return query;
 				},
 				processResults: function (data) {
-					// Transforms the top-level key of the response object from 'items' to 'results'
 					return {
 						results: $.map(data.data.users, function (obj) {
-							obj.id = obj.shopid || obj.username; // replace pk with your identifier
+							obj.id = obj.shopid || obj.username;
 							obj.text = obj.shopname || obj.username;
 
 							return obj;
@@ -305,7 +314,7 @@
 												html_product += '</div>';
 											html_product += '</div>';
 											html_product += '<div class="box-footer">';
-												html_product += '<a target="_blank" href="<?= module_link('sentiment/product/') ?>'+item.shopid+'/'+item.itemid+'" class="btn btn-primary">Analisis Sentimen</a>';
+												html_product += '<a target="_blank" href="<?= module_link('sentiment/product/') ?>'+item.shopid+'/'+item.itemid+'" class="btn btn-block bg-navy">Analisis Sentimen</a>';
 											html_product += '</div>';
 										html_product += '</div>';
 									html_product += '</div>';
@@ -324,6 +333,55 @@
 				}
 			});
 		});
+
+		$(document).on('click', '#get-comments', (function() {
+			Swal.fire({
+				title: 'Jumlah Komentar',
+				input: 'text',
+				inputAttributes: {
+					autocapitalize: 'off'
+				},
+				showCancelButton: true,
+				confirmButtonText: 'Ambil Komentar',
+				showLoaderOnConfirm: true,
+				preConfirm: (crawl) => {
+					var all_request = new Array();
+					for (i = 0; i < (crawl/50); i++) {
+						var request = new Promise((resolve, reject) => {
+							 $.ajax({
+								url: '<?= base_url('api/shopee/get_item_ratings/'.$this->uri->segment(4).'/'.$this->uri->segment(5)) ?>',
+								type: 'GET',
+								dataType: 'JSON',
+								data: { offset: (i*50) },
+								success: function(data) {
+									resolve(true)
+								},
+								error: function(error) {
+									reject(false);
+								}
+							})
+						});
+
+						all_request.push(request);
+					}
+
+					return Promise.all(all_request);
+				},
+				allowOutsideClick: () => !Swal.isLoading()
+			}).then((result) => {
+				if (result.isConfirmed) {
+					Swal.fire({
+						position: 'top-end',
+						icon: 'success',
+						title: 'Komentar berhasil di ambil',
+						showConfirmButton: false,
+						timer: 1500
+					}).then(() => {
+						window.location.reload();
+					}, console.log);
+				}
+			});
+		}));
 		</script>
 	</body>
 </html>
