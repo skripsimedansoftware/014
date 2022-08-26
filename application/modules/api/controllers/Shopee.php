@@ -75,8 +75,11 @@ class Shopee extends HMVC_Controller
 
 	public function image($uid)
 	{
-		$request = $this->curl->get($this->image_hostname.'/file/'.$uid.'_tn');
-		$this->output->set_content_type($request->response_headers[2])->set_output($request->response);
+		if (!empty($uid))
+		{
+			$request = $this->curl->get($this->image_hostname.'/file/'.$uid.'_tn');
+			$this->output->set_content_type($request->response_headers[2])->set_output($request->response);
+		}
 	}
 
 	public function store_product($shopid = NULL, $limit = 30, $offset = 0)
@@ -140,18 +143,35 @@ class Shopee extends HMVC_Controller
 
 		$response = json_decode($request->response);
 
-		foreach ($response->data->ratings as $rating)
+		if (isset($response->data) && isset($response->data->ratings))
 		{
-			$comment = $this->comment->get_where(array('order_id' => $rating->orderid));
-
-			if ($comment->num_rows() < 1)
+			foreach ($response->data->ratings as $rating)
 			{
-				$this->comment->insert(array(
-					'shop_id' => $rating->shopid,
-					'item_id' => $rating->itemid,
-					'order_id' => $rating->orderid,
-					'comment' => $rating->comment
-				));
+				$comment = $this->comment->get_where(array('order_id' => $rating->orderid));
+
+				if ($comment->num_rows() < 1000)
+				{
+					if ($comment->num_rows() < 1)
+					{
+						$this->comment->insert(array(
+							'shop_id' => $rating->shopid,
+							'item_id' => $rating->itemid,
+							'order_id' => $rating->orderid,
+							'comment' => $rating->comment
+						));
+
+						$comment_id = $this->db->insert_id();
+
+						if ($this->data_training->count_all_results() < 800)
+						{
+							$this->data_training->insert(array(
+								'comment_id' => $comment_id,
+								'classification' => 'Positif',
+								'text' => $rating->comment
+							));
+						}
+					}
+				}
 			}
 		}
 

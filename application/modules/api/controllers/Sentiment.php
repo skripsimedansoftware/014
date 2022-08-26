@@ -69,6 +69,7 @@ class Sentiment extends HMVC_Controller
 			break;
 
 			default:
+				$this->output->set_content_type('application/json')->set_output(json_encode([]));
 			break;
 		}
 	}

@@ -52,12 +52,15 @@ class Sentiment extends HMVC_Controller
 		$data_training = $this->data_training->get('data-training');
 		$data_training = $data_training->result_array();
 
-		$class_count = array('NETRAL' => 0);
+		// $class_count = array('UNKNOWN' => 0);
+		$class_count = array();
 		$naive_bayes = naive_bayes();
 
 		$data_training_count = array();
+		$confussion_matrix = array();
+		$confussion_matrix_class = array();
 
-		foreach ($data_training as $train)
+		foreach ($data_training as $key => $train)
 		{
 			$class_count[strtoupper($train['classification'])] = 0;
 
@@ -70,12 +73,19 @@ class Sentiment extends HMVC_Controller
 			$naive_bayes->train($train['classification'], array_unique(tokenize($train['text'])));
 		}
 
-		$product_comments = $this->comment->get_where(array('shop_id' => $shop_id, 'item_id' => $item_id));
-
+		$product_comments = $this->comment->limit(200)->get_where(array('shop_id' => $shop_id, 'item_id' => $item_id));
 		$sentiments = array();
 
 		foreach ($product_comments->result_array() as $key => $product_comment)
 		{
+			$find = array_search($product_comment['id'], array_column($data_training, 'comment_id'));
+			$confussion_matrix[$key] = array();
+
+			if ($find !== FALSE)
+			{
+				$confussion_matrix[$key] = array('actual' => strtoupper($data_training[$find]['classification']));
+			}
+
 			$pre_processing = $this->pre_process($product_comment['comment']);
 			$sentiment = $naive_bayes->predict(array_unique(tokenize($pre_processing)));
 			$sentiments[$key] = array(
@@ -88,23 +98,52 @@ class Sentiment extends HMVC_Controller
 
 			if (count(array_unique($sentiment)) == 1)
 			{
-				$class_count['NETRAL'] = ($class_count['NETRAL']+1);
-				$this->comment->update(array('classification' => strtoupper('netral')), array('id' => $product_comment['id']));
+				// $class_count['UNKNOWN'] = ($class_count['UNKNOWN']+1);
+				// $this->comment->update(array('classification' => strtoupper('UNKNOWN')), array('id' => $product_comment['id']));
+				$class = strtoupper(array_keys(array_unique($sentiment))[0]);
+				$class_count[$class] = ($class_count[$class]+1);
+				$this->comment->update(array('classification' => strtoupper($class)), array('id' => $product_comment['id']));
+				$confussion_matrix[$key] = array_merge($confussion_matrix[$key], array('predict' => $class));
 			}
 			else
 			{
 				$class = strtoupper(array_search(max($sentiment), $sentiment));
 				$class_count[$class] = ($class_count[$class]+1);
+				$confussion_matrix[$key] = array_merge($confussion_matrix[$key], array('predict' => $class));
 				$this->comment->update(array('classification' => $class), array('id' => $product_comment['id']));
 			}
 
 			$this->comment->reset_query();
 		}
 
+		$confussion_matrix_actual = array_map(function($data){
+			return $data['actual'];
+		}, $confussion_matrix);
+
+		$confussion_matrix_predict = array_map(function($data){
+			return $data['predict'];
+		}, $confussion_matrix);
+
+		$confussion_matrix_count = array_map(function($class) use ($confussion_matrix_actual, $confussion_matrix_predict) {
+			return array(
+				'class' => $class,
+				'actual' => array_sum(array_map(function($item) use ($class) {
+					return $item === $class;
+				}, $confussion_matrix_actual)),
+				'predict' => array_sum(array_map(function($item) use ($class) {
+					return $item === $class;
+				}, $confussion_matrix_predict))
+			);
+		}, array_keys($class_count));
+
+		$actual = array_sum(array_column($confussion_matrix_count, 'actual'));
+		$predict = array_sum(array_column($confussion_matrix_count, 'predict'));
+
 		$data['title'] = 'Sentiment Analysis';
 		$data['sentiments'] = $sentiments;
 		$data['class_count'] = $class_count;
 		$data['data_training_count'] = $data_training_count;
+		$data['confussion_matrix'] = ($actual/($predict+$actual)*100);
 		$data['product'] = $this->product->get_where(array('shop_id' => $shop_id, 'item_id' => $item_id));
 		$this->template->load('sentiment/analysis', $data);
 	}

@@ -12,7 +12,7 @@
 				<h3 class="box-title">Title</h3>
 			</div>
 			<div class="box-body">
-				<table class="table table-hover table-striped">
+				<table class="datatable">
 					<thead>
 						<th>#</th>
 						<th>Class</th>
@@ -25,9 +25,9 @@
 							<td><?= $key+1 ?></td>
 							<td><?= $data['classification'] ?></td>
 							<td><?= $data['text'] ?></td>
-							<td>
-								<a class="btn btn-sm btn-primary" href="<?= module_link('data_training/update/'.$data['id']) ?>">Edit</a>
-								<a class="btn btn-sm btn-danger" href="<?= module_link('data_training/delete/'.$data['id']) ?>">Delete</a>
+							<td style="width: 10%;">
+								<a class="btn btn-xs btn-primary" href="<?= module_link('data_training/update/'.$data['id']) ?>">Edit</a>
+								<a class="btn btn-xs btn-danger" href="<?= module_link('data_training/delete/'.$data['id']) ?>">Delete</a>
 							</td>
 						</tr>
 						<?php endforeach; ?>

@@ -20,16 +20,23 @@
 					<div class="box-body chart-responsive">
 						<div class="chart" id="data-training" style="height: 300px; position: relative;"></div>
 					</div>
+					<div class="box-footer">
+						Total Data : <b><?= array_sum($data_training_count) ?></b>
+					</div>
 				</div>
 			</div>
 			<div class="col-lg-6">
 				<div class="box box-danger">
 					<div class="box-header with-border">
-						<h3 class="box-title">Total Data <b><?= array_sum($class_count) ?></b></h3>
+						<h3 class="box-title">Data Komentar</h3>
 					</div>
 					<div class="box-body chart-responsive">
 						<div class="chart" id="sentiment-analysis" style="height: 300px; position: relative;"></div>
 						<ul class="chart-legend clearfix" id="sentiment-analysis-legend"></ul>
+					</div>
+					<div class="box-footer">
+						Total Data : <b><?= array_sum($class_count) ?></b>
+						<span class="pull-right">Confussion Matrix : <b><?= $confussion_matrix ?>%</b></span>
 					</div>
 				</div>
 			</div>
@@ -39,7 +46,7 @@
 				<h3 class="box-title">Hasil Sentiment Ulasan Produk : <b><?= $product_data->name ?></b></h3>
 			</div>
 			<div class="box-body">
-				<table class="table table-hover table-striped">
+				<table class="datatable table-bordered">
 					<thead>
 						<th>No</th>
 						<th>Komentar</th>
@@ -55,7 +62,7 @@
 								<?php
 								if (count(array_unique($data['sentiment'])) == 1)
 								{
-									echo 'NETRAL';
+									echo 'TIDAK DIKETAHUI';
 								}
 								else
 								{

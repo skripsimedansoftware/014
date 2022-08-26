@@ -107,9 +107,6 @@ class Migration_Tables extends CI_Migration
 			),
 			'data' => array(
 				'type' => 'TEXT'
-			),
-			'created_at' => array(
-				'type' => 'DATETIME'
 			)
 		));
 
@@ -165,15 +162,16 @@ class Migration_Tables extends CI_Migration
 				'unsigned' => TRUE,
 				'auto_increment' => TRUE
 			),
+			'comment_id' => array(
+				'type' => 'BIGINT',
+				'unsigned' => TRUE
+			),
 			'classification' => array(
 				'type' => 'VARCHAR',
 				'constraint' => 255
 			),
 			'text' => array(
 				'type' => 'TEXT'
-			),
-			'created_at' => array(
-				'type' => 'DATETIME'
 			)
 		));
 
