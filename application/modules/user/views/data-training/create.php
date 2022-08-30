@@ -21,7 +21,10 @@
 					</div>
 					<div class="form-group">
 						<label>Class</label>
-						<input type="text" name="class" class="form-control" placeholder="Class" value="<?= set_value('class') ?>">
+						<select name="class" class="form-control">
+							<option value="Positif" <?= strtolower(set_value('class')) == 'positif' ? 'selected' : '' ?>>Positif</option>
+							<option value="Negatif" <?= strtolower(set_value('class')) == 'negatif' ? 'selected' : '' ?>>Negatif</option>
+						</select>
 						<?= form_error('class', '<span class="help-block error">', '</span>'); ?>
 					</div>
 				</div>

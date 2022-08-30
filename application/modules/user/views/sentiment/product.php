@@ -42,19 +42,14 @@
 						?>
 					</div>
 					<div class="box-footer">
-						<a class="btn btn-block btn-primary" id="get-comments">Ambil Komentar</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-6">
-				<div class="box box-info">
-					<div class="box-header with-border">
-						<h3 class="box-title">Sentimen</h3>
-					</div>
-					<div class="box-body">
-					</div>
-					<div class="box-footer">
-						<a href="<?= module_link('sentiment/analysis/'.$this->uri->segment(4).'/'.$this->uri->segment(5)) ?>" class="btn btn-block btn-info" id="get-analysis">Analisis Sentimen</a>
+						<div class="row">
+							<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+								<a class="btn btn-block btn-primary" id="get-comments">Ambil Komentar</a>
+							</div>
+							<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+								<a href="<?= module_link('sentiment/analysis/'.$this->uri->segment(4).'/'.$this->uri->segment(5)) ?>" class="btn btn-block btn-info" id="get-analysis">Analisis Sentimen</a>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -47,17 +47,39 @@ class Shopee extends HMVC_Controller
 			'with_search_cover' => filter_var($with_search_cover, FILTER_VALIDATE_BOOLEAN)
 		), $this->input->get());
 
-		$request = $this->curl->get($this->url.'/api/v4/search/search_user', $request_params);
+		if ($response_cached = $this->cache->file->get('search_user_'.$this->input->get('keyword').'_'.$limit.'_'.$request_params['offset']))
+		{
+			$request = json_decode($response_cached);
+
+			$response = $request;
+		}
+		else
+		{
+			$request = $this->curl->get($this->url.'/api/v4/search/search_user', $request_params);
+
+			$this->cache->file->save('search_user_'.$this->input->get('keyword').'_'.$limit.'_'.$request_params['offset'], json_encode((object) array('response' => $request->response)), 10000000000);
+		}
 
 		$this->output->set_content_type('application/json')->set_output($request->response);
 	}
 
 	public function get_shop_detail($username = NULL, $sort_sold_out = 0)
 	{
-		$request = $this->curl->get($this->url.'/api/v4/shop/get_shop_detail', array(
-			'username' => $username,
-			'sort_sold_out' => $sort_sold_out
-		));
+		if ($response_cached = $this->cache->file->get('get_shop_detail_'.$username))
+		{
+			$request = json_decode($response_cached);
+
+			$response = $request;
+		}
+		else
+		{
+			$request = $this->curl->get($this->url.'/api/v4/shop/get_shop_detail', array(
+				'username' => $username,
+				'sort_sold_out' => $sort_sold_out
+			));
+
+			$this->cache->file->save('get_shop_detail_'.$username, json_encode((object) array('response' => $request->response)), 10000000000);
+		}
 
 		$this->output->set_content_type('application/json')->set_output($request->response);
 	}
@@ -77,8 +99,18 @@ class Shopee extends HMVC_Controller
 	{
 		if (!empty($uid))
 		{
-			$request = $this->curl->get($this->image_hostname.'/file/'.$uid.'_tn');
-			$this->output->set_content_type($request->response_headers[2])->set_output($request->response);
+			$image_cache = APPPATH.'cache'.DIRECTORY_SEPARATOR.'image_'.$uid;
+
+			if (file_exists($image_cache))
+			{
+				$this->output->set_content_type('image/jpeg')->set_output(file_get_contents($image_cache));
+			}
+			else
+			{
+				$request = $this->curl->get($this->image_hostname.'/file/'.$uid.'_tn');
+				file_put_contents($image_cache, $request->response);
+				$this->output->set_content_type($request->response_headers[2])->set_output($request->response);
+			}
 		}
 	}
 
@@ -93,9 +125,20 @@ class Shopee extends HMVC_Controller
 			'offset' => $offset
 		), $this->input->get());
 
-		$request = $this->curl->get($this->url.'/api/v4/recommend/recommend', $request_params);
+		if ($response_cached = $this->cache->file->get('store_product_'.$shopid.'_'.$limit.'_'.$offset))
+		{
+			$request = json_decode($response_cached);
 
-		$response = json_decode($request->response);
+			$response = json_decode($request);
+		}
+		else
+		{
+			$request = $this->curl->get($this->url.'/api/v4/recommend/recommend', $request_params);
+
+			$response = json_decode($request->response);
+
+			$this->cache->file->save('store_product_'.$shopid.'_'.$limit.'_'.$offset, json_encode($request->response), 10000000000);
+		}
 
 		foreach ($response->data->sections as $section)
 		{
@@ -113,18 +156,7 @@ class Shopee extends HMVC_Controller
 			}
 		}
 
-		$this->output->set_content_type('application/json')->set_output($request->response);
-	}
-
-	public function cookies()
-	{
-		$cookies = file_get_contents(FCPATH.'cookies.json');
-		$cookies = json_decode($cookies);
-
-		foreach ($cookies as $cookie)
-		{
-			$this->curl->setCookie($cookie->name, $cookie->value);
-		}
+		$this->output->set_content_type('application/json')->set_output(json_encode($response));
 	}
 
 	public function get_item_ratings($shopid = NULL, $itemid = NULL, $type = 0, $filter = 0, $flag = 1, $limit = 50, $offset = 0)
@@ -139,9 +171,22 @@ class Shopee extends HMVC_Controller
 			'offset' => $offset
 		);
 
-		$request = $this->curl->get($this->url.'/api/v2/item/get_ratings', array_merge($request_params, $this->input->get()));
+		$request_params = array_merge($request_params, $this->input->get());
 
-		$response = json_decode($request->response);
+		if ($response_cached = $this->cache->file->get('get_item_ratings_'.$request_params['shopid'].'_'.$request_params['itemid'].'_'.$request_params['limit'].'_'.$request_params['offset']))
+		{
+			$request = json_decode($response_cached);
+
+			$response = json_decode($request->response);
+		}
+		else
+		{
+			$request = $this->curl->get($this->url.'/api/v2/item/get_ratings', $request_params);
+
+			$response = json_decode($request->response);
+
+			$this->cache->file->save('get_item_ratings_'.$request_params['shopid'].'_'.$request_params['itemid'].'_'.$request_params['limit'].'_'.$request_params['offset'], json_encode((object) array('response' => $request->response)), 10000000000);
+		}
 
 		if (isset($response->data) && isset($response->data->ratings))
 		{

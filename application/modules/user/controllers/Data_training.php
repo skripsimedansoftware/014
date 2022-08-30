@@ -91,6 +91,12 @@ class Data_training extends HMVC_Controller
 		$this->data_training->delete(array('id' => $id));
 		redirect(module_link('data_training'), 'refresh');
 	}
+
+	public function delete_all()
+	{
+		$this->data_training->truncate();
+		redirect(module_link('data_training'), 'refresh');
+	}
 }
 
 /* End of file Data_training.php */

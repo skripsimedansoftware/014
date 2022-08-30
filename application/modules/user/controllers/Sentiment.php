@@ -116,6 +116,26 @@ class Sentiment extends HMVC_Controller
 			$this->comment->reset_query();
 		}
 
+		foreach (array_keys($class_count) as $class)
+		{
+			$confussion_matrix_class[$class] = array(
+				'TRUE' => 0,
+				'FALSE' => 0
+			);
+		}
+
+		foreach ($confussion_matrix as $matrix)
+		{
+			if ($matrix['actual'] === $matrix['predict'])
+			{
+				$confussion_matrix_class[$matrix['actual']]['TRUE'] = ($confussion_matrix_class[$matrix['actual']]['TRUE']+1);
+			}
+			else
+			{
+				$confussion_matrix_class[$matrix['actual']]['FALSE'] = ($confussion_matrix_class[$matrix['actual']]['FALSE']+1);
+			}
+		}
+
 		$confussion_matrix_actual = array_map(function($data){
 			return $data['actual'];
 		}, $confussion_matrix);
@@ -140,10 +160,14 @@ class Sentiment extends HMVC_Controller
 		$predict = array_sum(array_column($confussion_matrix_count, 'predict'));
 
 		$data['title'] = 'Sentiment Analysis';
-		$data['sentiments'] = $sentiments;
 		$data['class_count'] = $class_count;
 		$data['data_training_count'] = $data_training_count;
-		$data['confussion_matrix'] = ($actual/($predict+$actual)*100);
+		$data['confussion_matrix'] = array(
+			'class' => $confussion_matrix_class,
+			'count' => $confussion_matrix_count,
+			'total' => array_sum(array_column($confussion_matrix_class, 'TRUE'))/(array_sum(array_column($confussion_matrix_class, 'TRUE'))+array_sum(array_column($confussion_matrix_class, 'FALSE')))*100
+		);
+		$data['sentiments'] = $sentiments;
 		$data['product'] = $this->product->get_where(array('shop_id' => $shop_id, 'item_id' => $item_id));
 		$this->template->load('sentiment/analysis', $data);
 	}

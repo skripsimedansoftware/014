@@ -36,6 +36,7 @@
 			</div>
 			<div class="box-footer">
 				<a href="<?= module_link('data_training/create') ?>" class="btn btn-primary">Tambah Data</a>
+				<a href="<?= module_link('data_training/delete_all') ?>" class="pull-right btn btn-danger">Hapus Semua Data</a>
 			</div>
 		</div>
 	</section>
