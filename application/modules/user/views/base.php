@@ -283,6 +283,71 @@
 			escapeMarkup: function (markup) { return markup }
 		});
 
+		function loadStoreProducts(shopid, limit, offset) {
+
+			$.ajax({
+				url: '<?= base_url('api/shopee/store_product/') ?>'+shopid+'/'+limit+'/'+offset,
+				type: 'GET',
+				dataType: 'JSON',
+				data: {
+					sort_type: 1
+				},
+				success: function (products) {
+					$('.store-products').removeClass('hidden');
+
+					var chunkSize = 3
+
+					for (let i = 0; i < products.data.sections[0].data.item.length; i += chunkSize) {
+						const chunk = products.data.sections[0].data.item.slice(i, i + chunkSize);
+						var html_product = '';
+						chunk.forEach((item, index) => {
+							var formatter = new Intl.NumberFormat(['id'], {
+								style: 'currency',
+								currency: 'Rp.',
+								currency: item.currency,
+								minimumFractionDigits: 0,
+								maximumFractionDigits: 0
+							});
+
+							html_product += '<div class="col-lg-4 product-detail">';
+								html_product += '<div class="box box-primary">';
+									html_product += '<div class="box-header with-border"><h3 class="box-title">'+item.name+'</h3></div>';
+									html_product += '<div class="box-body">';
+										html_product += '<img id="'+item.image+'" src="<?= base_url('api/shopee/image/') ?>'+item.image+'" class="img-circle img-thumbnail img-responsive center-block">';
+										html_product += '<div class="row">';
+											html_product += '<div class="col-lg-12" style="margin-top:2%">';
+											html_product += '<table class="table table-hover table-striped">';
+												html_product += '<tbody>';
+													html_product += '<tr><td>Tersedia</td><td>'+nFormatter(item.stock)+'</td></tr>';
+													html_product += '<tr><td>Terjual</td><td>'+nFormatter(item.historical_sold)+'</td></tr>';
+													html_product += '<tr><td>Disukai</td><td>'+nFormatter(item.liked_count)+'</td></tr>';
+													html_product += '<tr><td>Merek</td><td>'+item.brand+'</td></tr>';
+													html_product += '<tr><td>Penilaian</td><td>'+item.item_rating.rating_star.toFixed(1)+'</td></tr>';
+													html_product += '<tr><td>Harga</td><td>'+item.currency+' '+formatter.format(parseInt(item.price.toString().slice(0, -5)))+'</td></tr>';
+												html_product += '<tbody>';
+											html_product += '</table>';
+											html_product += '</div>';
+										html_product += '</div>';
+									html_product += '</div>';
+									html_product += '<div class="box-footer">';
+										html_product += '<a target="_blank" href="<?= module_link('sentiment/product/') ?>'+item.shopid+'/'+item.itemid+'" class="btn btn-block bg-navy">Analisis Sentimen</a>';
+									html_product += '</div>';
+								html_product += '</div>';
+							html_product += '</div>';
+						});
+
+						$('.store-products').append('<div class="row">'+html_product+'</div>');
+					}
+
+					var html_product = '<div class="col-lg-12" style="margin-top:2%;margin-bottom:2%;"><button class="btn btn-block btn-primary" onclick="loadStoreProducts('+shopid+', '+limit+', '+(offset+limit)+')">Load More</button></div>';
+					$('.store-products').append('<div class="row">'+html_product+'</div>');
+				},
+				error: function(error) {
+					console.log('error', error);
+				}
+			});
+		}
+
 		$('#search-store').on('select2:select', function (e) {
 			$('.store-search-loading').removeClass('hidden');
 			$('.store-detail-body').empty();
@@ -319,64 +384,7 @@
 					$('.store-detail-body').append(html);
 					$('.store-detail-footer').append('<a target="_blank" href="https://shopee.co.id/'+detail.data.account.username+'" class="btn btn-info">Kunjungi Toko Di Shopee</a>');
 
-					$.ajax({
-						url: '<?= base_url('api/shopee/store_product/') ?>'+detail.data.shopid+'/'+12,
-						type: 'GET',
-						dataType: 'JSON',
-						data: {
-							sort_type: 1
-						},
-						success: function (products) {
-							$('.store-products').removeClass('hidden');
-
-							var chunkSize = 3
-
-							for (let i = 0; i < products.data.sections[0].data.item.length; i += chunkSize) {
-								const chunk = products.data.sections[0].data.item.slice(i, i + chunkSize);
-								var html_product = '';
-								chunk.forEach((item, index) => {
-									var formatter = new Intl.NumberFormat(['id'], {
-										style: 'currency',
-										currency: 'Rp.',
-										currency: item.currency,
-										minimumFractionDigits: 0,
-										maximumFractionDigits: 0
-									});
-
-									html_product += '<div class="col-lg-4 product-detail">';
-										html_product += '<div class="box box-primary">';
-											html_product += '<div class="box-header with-border"><h3 class="box-title">'+item.name+'</h3></div>';
-											html_product += '<div class="box-body">';
-												html_product += '<img id="'+item.image+'" src="<?= base_url('api/shopee/image/') ?>'+item.image+'" class="img-circle img-thumbnail img-responsive center-block">';
-												html_product += '<div class="row">';
-													html_product += '<div class="col-lg-12" style="margin-top:2%">';
-													html_product += '<table class="table table-hover table-striped">';
-														html_product += '<tbody>';
-															html_product += '<tr><td>Tersedia</td><td>'+nFormatter(item.stock)+'</td></tr>';
-															html_product += '<tr><td>Terjual</td><td>'+nFormatter(item.historical_sold)+'</td></tr>';
-															html_product += '<tr><td>Disukai</td><td>'+nFormatter(item.liked_count)+'</td></tr>';
-															html_product += '<tr><td>Merek</td><td>'+item.brand+'</td></tr>';
-															html_product += '<tr><td>Penilaian</td><td>'+item.item_rating.rating_star.toFixed(1)+'</td></tr>';
-															html_product += '<tr><td>Harga</td><td>'+item.currency+' '+formatter.format(parseInt(item.price.toString().slice(0, -5)))+'</td></tr>';
-														html_product += '<tbody>';
-													html_product += '</table>';
-													html_product += '</div>';
-												html_product += '</div>';
-											html_product += '</div>';
-											html_product += '<div class="box-footer">';
-												html_product += '<a target="_blank" href="<?= module_link('sentiment/product/') ?>'+item.shopid+'/'+item.itemid+'" class="btn btn-block bg-navy">Analisis Sentimen</a>';
-											html_product += '</div>';
-										html_product += '</div>';
-									html_product += '</div>';
-								});
-
-								$('.store-products').append('<div class="row">'+html_product+'</div>');
-							}
-						},
-						error: function(error) {
-							console.log('error', error);
-						}
-					});
+					loadStoreProducts(detail.data.shopid, 12, 0);
 				},
 				error: function(error) {
 					console.log('error', error);
