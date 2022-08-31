@@ -36,7 +36,9 @@
 					</div>
 					<div class="box-footer">
 						Total Data : <b><?= array_sum($class_count) ?></b>
-						<span class="pull-right">Confussion Matrix : <b><?= $confussion_matrix['total'] ?>%</b></span>
+						<?php if (isset($confussion_matrix)) : ?>
+							<span class="pull-right">Confussion Matrix : <b><?= $confussion_matrix['total'] ?>%</b></span>
+						<?php endif; ?>
 					</div>
 				</div>
 			</div>
