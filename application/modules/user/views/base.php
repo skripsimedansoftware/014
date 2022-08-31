@@ -163,8 +163,8 @@
 					<ul class="sidebar-menu" data-widget="tree">
 						<li class="header">MAIN NAVIGATION</li>
 						<li class="<?= matches_request(FALSE, 'user', 'index') ? 'active' : '' ?>"><a href="<?= module_link() ?>"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-						<li class="<?= matches_request(FALSE, 'sentiment', ['index', 'product']) ? 'active' : '' ?>"><a href="<?= module_link('sentiment') ?>"><i class="fa fa-pie-chart"></i> <span>Analisis Sentimen</span></a></li>
-						<li class="<?= matches_request(FALSE, 'data_training', 'index') ? 'active' : '' ?>"><a href="<?= module_link('data_training') ?>"><i class="fa fa-magic"></i> <span>Data Training</span></a></li>
+						<li class="<?= matches_request(FALSE, 'sentiment', ['index', 'product', 'analysis']) ? 'active' : '' ?>"><a href="<?= module_link('sentiment') ?>"><i class="fa fa-pie-chart"></i> <span>Analisis Sentimen</span></a></li>
+						<li class="<?= matches_request(FALSE, 'data_training', ['index', 'update']) ? 'active' : '' ?>"><a href="<?= module_link('data_training') ?>"><i class="fa fa-magic"></i> <span>Data Training</span></a></li>
 					</ul>
 				</section>
 			</aside>
